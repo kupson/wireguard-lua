@@ -1,6 +1,8 @@
-# Development / Docker
+# Lua bindings for WireGuard device configuration
 
-## Preflight
+## Development / Docker
+
+### Preflight
 
 The Docker development workflow uses `Makefile.docker` instead of the root
 `Makefile`. The root `Makefile` is still required, because the
@@ -40,7 +42,7 @@ The test target builds and reuses `docker/test/Dockerfile`. It runs Docker with
 `--cap-add NET_ADMIN`, so the Docker host or VM must expose WireGuard kernel
 support.
 
-# OpenWRT
+## OpenWRT
 
 The extensionless root `Makefile` is reserved for OpenWrt package integration.
 See the upstream [OpenWrt package guide](https://openwrt.org/docs/guide-developer/packages)
@@ -62,7 +64,7 @@ make package/lang/wireguard-lua/compile CONFIG_PACKAGE_wireguard-lua=m
 The Docker development makefile is separate and should be invoked explicitly as
 `Makefile.docker`.
 
-# Lua API
+## Lua API
 
 ```lua
 local wg = require "wireguard"
