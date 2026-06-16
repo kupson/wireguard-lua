@@ -43,11 +43,24 @@ support.
 # OpenWRT
 
 The extensionless root `Makefile` is reserved for OpenWrt package integration.
-It is intentionally not replaced by `Makefile.docker`, and `Makefile.docker`
-does not include it as make syntax. Instead, the Docker development makefile
-delegates to `scripts/download-wireguard-sources.sh`, which extracts the root
-`PKG_*` assignments into a temporary make fragment for downloading and verifying
-the WireGuard tools source archive.
+See the upstream [OpenWrt package guide](https://openwrt.org/docs/guide-developer/packages)
+for general package buildroot workflow.
+
+To build it from an OpenWrt buildroot, copy this directory into the package
+tree:
+
+```sh
+cp -a wireguard-lua /path/to/openwrt/package/lang/wireguard-lua
+```
+
+Then run this from the OpenWrt buildroot root:
+
+```sh
+make package/lang/wireguard-lua/compile CONFIG_PACKAGE_wireguard-lua=m
+```
+
+The Docker development makefile is separate and should be invoked explicitly as
+`Makefile.docker`.
 
 # Lua API
 
