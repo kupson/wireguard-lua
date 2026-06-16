@@ -1,0 +1,4 @@
+src/wireguard.c
+src/wireguard.h
+src/*.o
+src/*.so

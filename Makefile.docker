@@ -1,0 +1,10 @@
+ROOT_MAKEFILE := Makefile
+SRC_DIR := src
+
+.PHONY: download test
+
+download:
+	@ROOT_MAKEFILE="$(ROOT_MAKEFILE)" SRC_DIR="$(SRC_DIR)" sh scripts/download-wireguard-sources.sh
+
+test:
+	@sh scripts/test-in-docker.sh
