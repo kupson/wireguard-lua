@@ -1,7 +1,8 @@
 MODULE := wireguard.so
 OBJS := wireguard_lua.o wireguard.o
 
-CFLAGS += -D_GNU_SOURCE $(LUA_CFLAGS)
+CFLAGS += $(LUA_CFLAGS)
+wireguard_lua.o: CFLAGS += -D_GNU_SOURCE
 LDFLAGS += $(LUA_LIBS)
 
 all: $(MODULE)
