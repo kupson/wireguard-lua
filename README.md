@@ -48,3 +48,36 @@ does not include it as make syntax. Instead, the Docker development makefile
 delegates to `scripts/download-wireguard-sources.sh`, which extracts the root
 `PKG_*` assignments into a temporary make fragment for downloading and verifying
 the WireGuard tools source archive.
+
+# Lua API
+
+```lua
+local wg = require "wireguard"
+
+local private = wg.generate_private_key()
+local peer_private = wg.generate_private_key()
+local peer_public = wg.public_key(peer_private)
+local psk = wg.generate_preshared_key()
+local devices, err, errno = wg.list_devices()
+
+assert(wg.add_device("wgtest"))
+assert(wg.set_device{
+  name = "wgtest",
+  private_key = private,
+  listen_port = 51820,
+  replace_peers = true,
+  peers = {
+    {
+      public_key = peer_public,
+      preshared_key = psk,
+      endpoint = "192.0.2.1:51820",
+      persistent_keepalive_interval = 25,
+      replace_allowed_ips = true,
+      allowed_ips = { "10.0.0.2/32", "fd00::2/128" }
+    }
+  }
+})
+
+local dev = assert(wg.get_device("wgtest"))
+assert(wg.del_device("wgtest"))
+```
