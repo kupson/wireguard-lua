@@ -1,4 +1,4 @@
-# Lua bindings for WireGuard device configuration
+# Lua bindings for WireGuard® device configuration
 
 ## Development / Docker
 
@@ -96,3 +96,9 @@ assert(wg.set_device{
 local dev = assert(wg.get_device("wgtest"))
 assert(wg.del_device("wgtest"))
 ```
+
+## Trademark
+
+"[WireGuard](https://www.wireguard.com/)" and the "WireGuard" logo are
+registered trademarks of Jason A. Donenfeld. See the
+[WireGuard trademark policy](https://www.wireguard.com/trademark-policy/).
