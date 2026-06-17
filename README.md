@@ -66,6 +66,80 @@ The Docker development makefile is separate and should be invoked explicitly as
 
 ## Lua API
 
+Load the module with:
+
+```lua
+local wg = require "wireguard"
+```
+
+WireGuard keys are base64 strings in the standard 44-character WireGuard key
+format. Invalid key strings raise a Lua error. Kernel operations return `true`
+or a result table on success, and `nil, message, errno` on failure.
+
+### Key functions
+
+- `generate_private_key() -> private_key`
+  Returns a new private key string.
+- `generate_preshared_key() -> preshared_key`
+  Returns a new preshared key string.
+- `public_key(private_key) -> public_key`
+  Derives a public key string from `private_key`.
+- `key_is_zero(key) -> boolean`
+  Returns whether `key` is the all-zero WireGuard key.
+
+### Device functions
+
+- `list_devices() -> { name, ... } | nil, message, errno`
+  Returns an array of WireGuard interface names.
+- `add_device(name) -> true | nil, message, errno`
+  Creates a WireGuard interface.
+- `del_device(name) -> true | nil, message, errno`
+  Deletes a WireGuard interface.
+- `get_device(name) -> device | nil, message, errno`
+  Reads WireGuard interface configuration and runtime state.
+- `set_device(device) -> true | nil, message, errno`
+  Applies WireGuard configuration from a device table.
+
+The `set_device()` table accepts:
+
+- `name` string, required.
+- `private_key` key string, optional. Use `false` to clear it.
+- `listen_port` integer from `0` to `65535`, optional.
+- `fwmark` integer from `0` to `4294967295`, optional. Use `false` to clear it.
+- `replace_peers` boolean, optional.
+- `peers` array of peer tables, optional.
+
+Each peer table accepts:
+
+- `public_key` key string, required.
+- `preshared_key` key string, optional. Use `false` to clear it.
+- `endpoint` string as `host:port` or `[ipv6-host]:port`, optional.
+- `persistent_keepalive_interval` integer from `0` to `65535`, optional.
+- `replace_allowed_ips` boolean, optional.
+- `remove` boolean, optional.
+- `allowed_ips` array of CIDR strings, optional. Plain IPv4 and IPv6 addresses
+  default to `/32` and `/128`.
+
+`get_device()` returns a device table with:
+
+- `name` string.
+- `ifindex` integer.
+- `public_key`, `private_key`, `listen_port`, and `fwmark` when reported by the
+  kernel.
+- `peers` array.
+
+Each returned peer contains:
+
+- `public_key` string.
+- `preshared_key` string when configured.
+- `endpoint` string or `nil`.
+- `persistent_keepalive_interval` integer.
+- `last_handshake_time_sec` and `last_handshake_time_nsec` numbers.
+- `rx_bytes` and `tx_bytes` numbers.
+- `allowed_ips` array of CIDR strings.
+
+Example:
+
 ```lua
 local wg = require "wireguard"
 
