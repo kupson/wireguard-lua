@@ -1,17 +1,16 @@
 MODULE := wireguard.so
 OBJS := wireguard_lua.o wireguard.o
 
-CFLAGS += $(LUA_CFLAGS)
-wireguard_lua.o: CFLAGS += -D_GNU_SOURCE
-LDFLAGS += $(LUA_LIBS)
+CPPFLAGS += $(LUA_CFLAGS)
+LDLIBS += $(LUA_LIBS)
 
 all: $(MODULE)
 
 $(MODULE): $(OBJS)
-	$(CC) -shared -o $@ $(OBJS) $(LDFLAGS)
+	$(CC) -shared -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
 
 %.o: %.c wireguard.h
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(MODULE)
